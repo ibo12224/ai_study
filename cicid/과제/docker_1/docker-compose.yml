@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  python-app:
+    # 1. Dockerfile이 들어있는 폴더의 경로
+    build: ./python-app
+    
+    # 2. 생성될 이미지 이름 지정
+    image: my-python1-app:latest
+    
+    # 3. 내 컴퓨터의 소스 코드 폴더와 컨테이너 내부 연결 (실시간 수정 반영)
+    volumes:
+      - ./python-app:/usr/src/app
+    
+    # 4. 컨테이너 내부 작업 디렉토리 설정
+    working_dir: /usr/src/app
+    
+    # 5. 실행할 명령
+    command: streamlit run app.py
+    ports:
+      - "8501:8501"
+
+  db:
+      image: mysql:5.7
+      environment:
+        MYSQL_ROOT_PASSWORD: 1234
+        MYSQL_DATABASE: testdb
+        MYSQL_USER: testuser
+        MYSQL_PASSWORD: testpassword
+      volumes:
+        - mysql_data:/var/lib/mysql
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  python1-app:
+      # 1. Dockerfile이 들어있는 폴더의 경로
+      build: ./python-app
+      
+      # 2. 생성될 이미지 이름 지정
+      image: my-python2-app:latest
+      
+      # 3. 내 컴퓨터의 소스 코드 폴더와 컨테이너 내부 연결 (실시간 수정 반영)
+      volumes:
+        - ./python-app:/usr/src/app
+      
+      # 4. 컨테이너 내부 작업 디렉토리 설정
+      working_dir: /usr/src/app
+      
+      # 5. 실행할 명령
+      command: streamlit run pages/app2.py
+      ports:
+        - "8502:8501"
+volumes:
+  mysql_data:
+
+

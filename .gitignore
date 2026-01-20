@@ -5,3 +5,6 @@ llm/secret/
 파이토치/data/
 *.csv
 *.zip
+*.jpg
+*.png
+*.pdf
